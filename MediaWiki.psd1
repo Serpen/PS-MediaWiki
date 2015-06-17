@@ -20,12 +20,6 @@ GUID = 'edb173dd-a344-42fd-bdc4-d0a345dac2e8'
 # Autor dieses Moduls
 Author = 'Serpen'
 
-# Unternehmen oder Hersteller dieses Moduls
-CompanyName = '
-
-# Urheberrechtserklärung für dieses Modul
-Copyright = ''
-
 # Beschreibung der von diesem Modul bereitgestellten Funktionen
 Description = 'Mediawiki API for Powershell'
 

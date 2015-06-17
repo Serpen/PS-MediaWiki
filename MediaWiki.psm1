@@ -378,7 +378,7 @@ param (
     [Parameter(Mandatory=$false )][int]$Limit = $MW_Limit
 )
 	
-	$json = Invoke-Query -GetProperties @{action='query'; prop='linkshere'; titles=$Title; lhlimit=$limit}
+	$json = Invoke-Query -GetProperties @{action='query'; prop='linkshere'; titles=$Title; lhlimit=$limit; continue=''}
 
     
 	if (Test-MwError $json) {

@@ -1,7 +1,7 @@
 #
 # Modulmanifest für das Modul "MediaWiki"
 #
-# Generiert von: KatlunM
+# Generiert von: Serpen
 #
 # Generiert am: 13.03.2015
 #
@@ -18,13 +18,13 @@ ModuleVersion = '1.2'
 GUID = 'edb173dd-a344-42fd-bdc4-d0a345dac2e8'
 
 # Autor dieses Moduls
-Author = 'KatlunM, marco.katlun@fek.de'
+Author = 'Serpen'
 
 # Unternehmen oder Hersteller dieses Moduls
-CompanyName = 'FEK - Friedrich-Ebert-Krankenhaus Neumünster GmbH'
+CompanyName = '
 
 # Urheberrechtserklärung für dieses Modul
-Copyright = '(c) 2015 KatlunM. Alle Rechte vorbehalten.'
+Copyright = ''
 
 # Beschreibung der von diesem Modul bereitgestellten Funktionen
 Description = 'Mediawiki API for Powershell'

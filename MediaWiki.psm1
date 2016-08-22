@@ -102,20 +102,22 @@ param (
         [System.Runtime.InteropServices.marshal]::ZeroFreeBSTR($BSTR)
     }
 
-    $uri = $site.AbsoluteUri + "?$MW_Format&action=login&lgname=" + (Encode-Url($username))
-
-    $body = @{}
-    $body.lgpassword = $password
-
-    $object = Invoke-WebRequest $uri -Method Post -SessionVariable mw_session -Body $body
+    $uri = $site.AbsoluteUri + "?$MW_Format&action=query&meta=tokens&type=login"
+    $object = Invoke-WebRequest $uri -Method Post -SessionVariable mw_session
     $json = ConvertFrom-JsonRequest $object
-    
-    if ($json.login.result -eq 'NeedToken') {
-        $uri = $site.AbsoluteUri + "?$MW_Format&action=login&lgname=" + (Encode-Url($username)) + '&lgtoken=' + $json.login.token
+
+    #$uri = $site.AbsoluteUri + "?$MW_Format&action=login&lgname=" + (Encode-Url($username))
+
+    #if ($json.login.result -eq 'NeedToken') {
+        $body = @{}
+        $body.lgpassword = $password
+        $body.lgtoken = $json.query.tokens.logintoken
+        $uri = $site.AbsoluteUri + "?$MW_Format&action=login&lgname=" + (Encode-Url($username)) #+ '&lgtoken=' + 
         $object = Invoke-WebRequest $uri -Method Post -WebSession $mw_session -Body $body
         $json = ConvertFrom-JsonRequest $object
 
-    }
+    #}
+
     if($json.login.result -ne 'Success') {
         throw ('Login.result = ' + $json.login.result)
     } else {

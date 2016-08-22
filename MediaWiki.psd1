@@ -12,7 +12,7 @@
 RootModule = 'MediaWiki.psm1'
 
 # Die Versionsnummer dieses Moduls
-ModuleVersion = '1.2'
+ModuleVersion = '1.3.1'
 
 # ID zur eindeutigen Kennzeichnung dieses Moduls
 GUID = 'edb173dd-a344-42fd-bdc4-d0a345dac2e8'

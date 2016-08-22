@@ -1,7 +1,7 @@
 #
 # Modulmanifest für das Modul "MediaWiki"
 #
-# Generiert von: Serpen
+# Generiert von: KatlunM
 #
 # Generiert am: 13.03.2015
 #
@@ -30,10 +30,10 @@ PowerShellVersion = '3.0'
 RequiredModules = @('microsoft.powershell.security')
 
 # Aus diesem Modul zu exportierende Funktionen
-FunctionsToExport = 'Add-PageText', 'Connect-Site', 'Disconnect-Site', 'Find-Pages', 'Format-PageContentHTML', 'Get-AllPages', 'Get-CategoryPages', 'Get-FileInfo', 'Get-LinksHere', 'Get-PageCategories', 'Get-PageContent', 'Get-PageLinks', 'Get-PageList', 'Get-PageRevisions', 'Get-PageTemplates', 'Get-RecentChanges', 'Get-TranscludedIn', 'Import-File', 'Invoke-Query', 'Move-Page', 'New-Page', 'Protect-Page', 'Remove-Page', 'Set-Page', 'Test-Page'
+FunctionsToExport = 'Add-PageText', 'Connect-Site', 'Disconnect-Site', 'Find-Pages', 'Format-PageContentHTML', 'Get-AllPages', 'Get-CategoryPages', 'Get-FileInfo', 'Get-FileUsage', 'Get-LinksHere', 'Get-PageCategories', 'Get-PageContent', 'Get-PageLinks', 'Get-PageList', 'Get-PageRevisions', 'Get-PageTemplates', 'Get-RecentChanges', 'Get-SemanticQuery', 'Get-TranscludedIn', 'Import-File', 'Invoke-Query', 'Move-Page', 'New-Page', 'Protect-Page', 'Remove-Page', 'Set-Page', 'Test-Page'
 
 # Aus diesem Modul zu exportierende Cmdlets
-CmdletsToExport = 'Add-PageText', 'Connect-Site', 'Disconnect-Site', 'Find-Pages', 'Format-PageContentHTML', 'Get-AllPages', 'Get-CategoryPages', 'Get-FileInfo', 'Get-LinksHere', 'Get-PageCategories', 'Get-PageContent', 'Get-PageLinks', 'Get-PageList', 'Get-PageRevisions', 'Get-PageTemplates', 'Get-RecentChanges', 'Get-TranscludedIn', 'Import-File', 'Invoke-Query', 'Move-Page', 'New-Page', 'Protect-Page', 'Remove-Page', 'Set-Page', 'Test-Page'
+CmdletsToExport = 'Add-PageText', 'Connect-Site', 'Disconnect-Site', 'Find-Pages', 'Format-PageContentHTML', 'Get-AllPages', 'Get-CategoryPages', 'Get-FileInfo', 'Get-FileUsage', 'Get-LinksHere', 'Get-PageCategories', 'Get-PageContent', 'Get-PageLinks', 'Get-PageList', 'Get-PageRevisions', 'Get-PageTemplates', 'Get-RecentChanges', 'Get-SemanticQuery', 'Get-TranscludedIn', 'Import-File', 'Invoke-Query', 'Move-Page', 'New-Page', 'Protect-Page', 'Remove-Page', 'Set-Page', 'Test-Page'
 
 # Die aus diesem Modul zu exportierenden Variablen
 #VariablesToExport = '*'

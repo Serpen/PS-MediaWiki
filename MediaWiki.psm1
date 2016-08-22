@@ -35,7 +35,7 @@ function ConvertFrom-JsonRequest {
 	} #endif
 } #end function ConvertFrom-JsonRequest
 
-function Test-MwError {
+function Test-Error {
 	param ($json)
 	
 	($json | Get-Member -Name error) -ne $null
@@ -106,7 +106,9 @@ param (
     $object = Invoke-WebRequest $uri -Method Post -SessionVariable mw_session
     $json = ConvertFrom-JsonRequest $object
 
+
     #$uri = $site.AbsoluteUri + "?$MW_Format&action=login&lgname=" + (Encode-Url($username))
+
 
     #if ($json.login.result -eq 'NeedToken') {
         $body = @{}
@@ -144,7 +146,7 @@ function Disconnect-Site {
 
 #endregion "connect"
 
-#reguib "edit"
+#region "edit"
 <#
 .Synopsis
    Text zu Seite hinzufügen
@@ -152,7 +154,8 @@ function Disconnect-Site {
    Add-MWPageText -title Testseite -text 'Dies ist eine Testseite'
 #>
 function Add-PageText {
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
+
 param (
     [Parameter(Mandatory=$true )][string]$Title,
     [Parameter(Mandatory=$true )][string]$Text,
@@ -179,11 +182,15 @@ param (
         $get.Add('section',$Section)
     }
 
-    $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token;appendtext=$Text}
+    if ($PSCmdlet.ShouldProcess($Title, 'Add Text')) {
+        $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token;appendtext=$Text}
 
-    if (Test-MwError $json) {
-        Write-Error $json.error
+        if (Test-Error $json) {
+            Write-Error $json.error
+        }
     }
+
+    
 } #end function Add-PageText
 
 <#
@@ -193,7 +200,8 @@ param (
    New-MWPage -title Testseite -text 'Dies ist eine Testseite'
 #>
 function New-Page {
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
+
 param (
     [Parameter(Mandatory=$true )][string]$Title,
     [Parameter(Mandatory=$true )][string]$Text,
@@ -217,16 +225,21 @@ param (
         $get.Add('bot',1)
     }
 
-    $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token;text=$Text}
+    if ($PSCmdlet.ShouldProcess($Title, 'New Text')) {
+        $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token;text=$Text}
 
-    if (Test-MwError $json) {
-        Write-Error $json.error
+        if (Test-Error $json) {
+            Write-Error $json.error
+        }
     }
+
+    
 } # end function New-Page
 
 
 function Set-Page {
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
+
 param (
     [Parameter(Mandatory=$true )][string]$Title,
     [Parameter(Mandatory=$true )][string]$Text,
@@ -253,11 +266,15 @@ param (
         $get.Add('section',$section)
     }
 
-    $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token;text=$Text}
+    if ($PSCmdlet.ShouldProcess($Title, 'Set Page')) {
+        $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token;text=$Text}
 
-    if (Test-MwError $json) {
-        Write-Error $json.error
+        if (Test-Error $json) {
+            Write-Error $json.error
+        }
     }
+
+    
 } #end function Set-Page
 
 #endregion "edit"
@@ -282,7 +299,7 @@ param (
 	
     $json = Invoke-Query -GetProperties $get
 
-	if (Test-MwError $json) {
+	if (Test-Error $json) {
         Write-Error $json.error
     } else {
 		$json.query.querypage.results
@@ -302,7 +319,9 @@ param (
 )
     $json = Invoke-Query -GetProperties @{action='query'; prop='categories'; titles=$Title; cllimit=$Limit; continue=''}
 
+    try {
     ($json.query.pages) | gm -MemberType NoteProperty | % {$json.query.pages.$($_.name).categories.title} | % {New-Object PSOBject -Property ([ordered]@{Title=$Title; category=$_})}
+    } catch {}
 }
 
 <#
@@ -332,7 +351,7 @@ param (
 
     $json = Invoke-Query -GetProperties $get
 
-    if (Test-MwError $json) {
+    if (Test-Error $json) {
         Write-Error $json.error
     } else {
         $json.query.allpages 
@@ -366,7 +385,7 @@ param (
 	
     $json = Invoke-Query -GetProperties $get
 	
-	if (Test-MwError $json) {
+	if (Test-Error $json) {
         Write-Error $json.error
     } else {
 		$json.query.categorymembers
@@ -383,7 +402,7 @@ param (
 	$json = Invoke-Query -GetProperties @{action='query'; prop='linkshere'; titles=$Title; lhlimit=$limit; continue=''}
 
     
-	if (Test-MwError $json) {
+	if (Test-Error $json) {
         Write-Error $json.error
     } else {
         if (($json.query.pages | Get-Member -Name '-1') -eq $null) {
@@ -403,7 +422,7 @@ param (
 	
 	$json = Invoke-Query -GetProperties @{action='query'; prop='transcludedin'; titles=$Title; tilimit=$Limit; continue=''}
 
-    if (Test-MwError $json) {
+    if (Test-Error $json) {
         Write-Error $json.error
     } else {
         if ((($json.query.pages) | Get-Member '-1') -eq $null) {
@@ -439,7 +458,7 @@ param (
 	
 	$json = Invoke-Query -GetProperties $get
 	
-	if (Test-MwError $json) {
+	if (Test-Error $json) {
         Write-Error $json.error
     } else {
 		$json.parse.wikitext | select -ExpandProperty *
@@ -460,7 +479,7 @@ param (
 	
 	$json = Invoke-Query -GetProperties $get
 	
-	if (Test-MwError $json) {
+	if (Test-Error $json) {
         Write-Error $json.error
     } else {
 		$json.parse.text | select -ExpandProperty *
@@ -487,7 +506,8 @@ param (
 }
 
 function Remove-Page {
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
+
 param (
     [Parameter(Mandatory=$true )][string]$Title,
     [Parameter(Mandatory=$false)][string]$Reason
@@ -498,15 +518,22 @@ param (
         $get.Add('reason', $Reason)
     }
 
-    $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token}
-    if (Test-MwError $json) {
-        Write-Error $json.error
+    if ($PSCmdlet.ShouldProcess($Title, 'Remove Page')) {
+        $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token}
+
+
+        if (Test-Error $json) {
+            Write-Error $json.error
+        }
     }
+
+    
 }
 
 
 function Move-Page {
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
+
 param (
     [Parameter(Mandatory=$true )][string]$From,
     [Parameter(Mandatory=$true )][string]$To,
@@ -530,9 +557,11 @@ param (
         $get.Add('ignorewarnings', 1)
     }
 
-    $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token}
+    if ($PSCmdlet.ShouldProcess($From, 'Move Page')) {
+        $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token}
+    }
 
-    if (Test-MwError $json) {
+    if (Test-Error $json) {
         Write-Error $json.error
     }
 	
@@ -598,7 +627,7 @@ param (
 	}
 	$json = Invoke-Query -GetProperties @{action='query'; prop='imageinfo'; titles=$Title; iiprop=('url','size','mime','mediatype','timestamp','user','comment','sha1','metadata') -join '|'}
 	
-    if (Test-MwError $json) {
+    if (Test-Error $json) {
         Write-Error $json.error
     } else {
         #Fehlerbild: $json.query.pages.'-1'
@@ -610,8 +639,33 @@ param (
     }
 }
 
+function Get-FileUsage {
+param (
+    [Parameter(Mandatory=$false )][string]$Title
+)
+
+	if (-not $title.contains(':')) {
+		$Title = "File:$Title"
+	}
+	$json = Invoke-Query -GetProperties @{action='query'; prop='fileusage'; titles=$Title; continue=''}
+	
+    if (Test-Error $json) {
+        Write-Error $json.error
+    } else {
+        #Fehlerbild: $json.query.pages.'-1'
+        if (($json.query.pages | Get-Member -Name -1) -eq $null) {
+            try {
+                ($json.query.pages | select -ExpandProperty *).fileusage
+            } catch {}
+        } else {
+            Write-Warning  "Image '$Title' does not exist"
+        }
+    }
+}
+
 function Import-File {
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
+
 param (
     [Parameter(Mandatory=$true, ParameterSetName='Local')] [System.IO.FileInfo]$LocalFileName,
     [Parameter(Mandatory=$true ,ParameterSetName='Url')][uri]$url,
@@ -629,9 +683,11 @@ param (
             $get.add("comment",$Comment)
         }
 
-        $json = Invoke-Query -GetProperties $Get -PostProperties @{token=$mw_token}
+        if ($PSCmdlet.ShouldProcess($Name, 'Import File')) {
+            $json = Invoke-Query -GetProperties $Get -PostProperties @{token=$mw_token}
+        }
 
-        if (Test-MwError $json) {
+        if (Test-Error $json) {
             Write-Error $json.error
         }
 
@@ -669,29 +725,35 @@ param (
         if ($IgnoreWarnings) {
             $uri += '&ignorewarnings=1'
         }
-       
-        $object = Invoke-WebRequest -Uri $uri -WebSession $mw_session -Method Post -ContentType "multipart/form-data; boundary=$MW_UploadBoundary"  -InFile $tmpFile # -Body $contents.ToString() 
+        
+        if ($PSCmdlet.ShouldProcess($Name, 'Import File')) {
 
-        $json =  ConvertFrom-JsonRequest $object
+            $object = Invoke-WebRequest -Uri $uri -WebSession $mw_session -Method Post -ContentType "multipart/form-data; boundary=$MW_UploadBoundary"  -InFile $tmpFile # -Body $contents.ToString() 
 
-        #Set-Content -Value $contents.ToString() -Path $tmpFile
+            $json =  ConvertFrom-JsonRequest $object
 
-        if (Test-MwError $json) {
-            Write-Verbose $contents.ToString()
-            Write-Error $json.error
-        }
+            #Set-Content -Value $contents.ToString() -Path $tmpFile
 
-        if (($json.upload | Get-Member -Name warnings) -ne $null) {
-            if ($IgnoreWarnings) {
-                Write-Warning $json.upload.warnings
-            } else {
-                Write-Error $json.upload.warnings
+            if (Test-Error $json) {
+                Write-Debug "Content: $($contents.ToString())"
+                Write-Error $json.error
+            }
+
+
+            if (($json.upload | Get-Member -Name warnings) -ne $null) {
+                if ($IgnoreWarnings) {
+                    Write-Warning $json.upload.warnings
+                } else {
+
+                    Write-Error $json.upload.warnings
+                }
             }
         }
 
+        
 
 
-        [void](Remove-Item $tmpFile)
+        [void](Remove-Item $tmpFile -ErrorAction SilentlyContinue)
     } #end else
     $json
 	
@@ -703,9 +765,9 @@ param (
     [Parameter(Mandatory=$false )][int]$Limit = $MW_Limit
 
 )
-    $json = Invoke-MWQuery -GetProperties @{action='query'; prop='revisions'; titles=$Title; rvlimit=$Limit; continue='' }
+    $json = Invoke-Query -GetProperties @{action='query'; prop='revisions'; titles=$Title; rvlimit=$Limit; continue='' }
 
-    if (Test-MwError $json) {
+    if (Test-Error $json) {
             Write-Error $json.error
     } else {
         if (($json.query.pages | Get-Member -Name -1) -eq $null) {
@@ -718,6 +780,7 @@ param (
 }
 
 function Protect-Page {
+[CmdletBinding(SupportsShouldProcess=$true)]
 param (
     [Parameter(Mandatory=$true )][string]$Title,
     [Parameter(Mandatory=$false )][Switch]$Cascade,
@@ -772,9 +835,60 @@ param (
         $get.Add('expiry', "$EditExpiry|$MoveExpiry")
     }
 
+    if ($PSCmdlet.ShouldProcess($Title, 'Protect Page')) {
 
-    $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token}
+        $json = Invoke-Query -GetProperties $get -PostProperties @{token=$mw_token}
+    }
 
     $json
 	
 } #function Protect-Page
+
+function Get-SemanticQuery {
+[CmdletBinding()]
+param (
+    [Parameter(Mandatory=$true, ParameterSetName='DirectQuery',Position=0)]  [string]$Query,
+    [Parameter(Mandatory=$true, ParameterSetName='InDirectQuery')][hashtable]$Where,
+    [Parameter(Mandatory=$false,ParameterSetName='InDirectQuery')][string[]]$Properties = "#",
+    [Parameter(Mandatory=$false,ParameterSetName='InDirectQuery')][int]$Limit = -1
+)
+    
+    $get = @{action='ask'}
+
+    if ($PSCmdlet.ParameterSetName -eq 'DirectQuery') {
+        $get.add('query', $Query)
+    } else  {
+        [string]$querystring = ""
+        foreach ($criteria in $Where.GetEnumerator()) {
+            $querystring += "[[$($criteria.name)::$($criteria.value)]]"
+        }
+        foreach ($prop in $Properties) {
+            $querystring += "|?$prop"
+        }
+
+        if ($Limit -ne -1) {
+            $querystring += "|limit=$limit"
+        }
+        $get.add('query', $querystring)
+    }
+    
+    $json = Invoke-Query -GetProperties $get
+
+    if (Test-Error $json) {
+        Write-Error $json.error.query
+    } else {
+        if ($json.query.results -ne $null) {
+            foreach ($entryname in ($json.query.results | Get-Member -Type NoteProperty | select -ExpandProperty Name)) {
+                $props = [ordered]@{Name=$entryname}
+                foreach ($propname in ($json.query.results."$entryname".printouts | Get-Member -Type NoteProperty -ea SilentlyContinue | select -ExpandProperty Name)) {
+                    $props.add($propname, $json.query.results."$entryname".printouts.$propname -join ', ')        
+                }
+                $obj = New-Object PSObject -Property $props
+                $obj.PSObject.TypeNames.Insert(0, 'FEK.Wiki.SemanticEntry') | Out-Null
+                $obj
+            }
+        } else {
+            Write-Warning $json.error
+        }
+    }
+} #Query-Sematics

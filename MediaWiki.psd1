@@ -1,7 +1,7 @@
 #
 # Modulmanifest für das Modul "MediaWiki"
 #
-# Generiert von: KatlunM
+# Generiert von: Serpen
 #
 # Generiert am: 13.03.2015
 #

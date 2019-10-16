@@ -12,7 +12,7 @@
 RootModule = 'MediaWiki.psm1'
 
 # Die Versionsnummer dieses Moduls
-ModuleVersion = '1.3.1'
+ModuleVersion = '1.4'
 
 # ID zur eindeutigen Kennzeichnung dieses Moduls
 GUID = 'edb173dd-a344-42fd-bdc4-d0a345dac2e8'
@@ -24,16 +24,16 @@ Author = 'Serpen'
 Description = 'Mediawiki API for Powershell'
 
 # Die für dieses Modul mindestens erforderliche Version des Windows PowerShell-Moduls
-PowerShellVersion = '3.0'
+PowerShellVersion = '4.0'
 
 # Die Module, die vor dem Importieren dieses Moduls in die globale Umgebung geladen werden müssen
 RequiredModules = @('microsoft.powershell.security')
 
 # Aus diesem Modul zu exportierende Funktionen
-FunctionsToExport = 'Add-PageText', 'Connect-Site', 'Disconnect-Site', 'Find-Pages', 'Format-PageContentHTML', 'Get-AllPages', 'Get-CategoryPages', 'Get-FileInfo', 'Get-FileUsage', 'Get-LinksHere', 'Get-PageCategories', 'Get-PageContent', 'Get-PageLinks', 'Get-PageList', 'Get-PageRevisions', 'Get-PageTemplates', 'Get-RecentChanges', 'Get-SemanticQuery', 'Get-TranscludedIn', 'Import-File', 'Invoke-Query', 'Move-Page', 'New-Page', 'Protect-Page', 'Remove-Page', 'Set-Page', 'Test-Page'
+FunctionsToExport = 'Add-MWPageText', 'Connect-MWSite', 'Disconnect-MWSite', 'Find-MWPages', 'Format-MWPageContentHTML', 'Get-MWAllPages', 'Get-MWCategoryPages', 'Get-MWFileInfo', 'Get-MWFileUsage', 'Get-MWLinksHere', 'Get-MWPageCategories', 'Get-MWPageContent', 'Get-MWPageLinks', 'Get-MWPageList', 'Get-MWPageRevisions', 'Get-MWPageTemplates', 'Get-MWRecentChanges', 'Get-MWSemanticQuery', 'Get-MWTranscludedIn', 'Import-MWFile', 'Invoke-MWQuery', 'Move-MWPage', 'New-MWPage', 'Protect-MWPage', 'Remove-MWPage', 'Set-MWPage', 'Test-MWPage'
 
 # Aus diesem Modul zu exportierende Cmdlets
-CmdletsToExport = 'Add-PageText', 'Connect-Site', 'Disconnect-Site', 'Find-Pages', 'Format-PageContentHTML', 'Get-AllPages', 'Get-CategoryPages', 'Get-FileInfo', 'Get-FileUsage', 'Get-LinksHere', 'Get-PageCategories', 'Get-PageContent', 'Get-PageLinks', 'Get-PageList', 'Get-PageRevisions', 'Get-PageTemplates', 'Get-RecentChanges', 'Get-SemanticQuery', 'Get-TranscludedIn', 'Import-File', 'Invoke-Query', 'Move-Page', 'New-Page', 'Protect-Page', 'Remove-Page', 'Set-Page', 'Test-Page'
+CmdletsToExport   = 'Add-MWPageText', 'Connect-MWSite', 'Disconnect-MWSite', 'Find-MWPages', 'Format-MWPageContentHTML', 'Get-MWAllPages', 'Get-MWCategoryPages', 'Get-MWFileInfo', 'Get-MWFileUsage', 'Get-MWLinksHere', 'Get-MWPageCategories', 'Get-MWPageContent', 'Get-MWPageLinks', 'Get-MWPageList', 'Get-MWPageRevisions', 'Get-MWPageTemplates', 'Get-MWRecentChanges', 'Get-MWSemanticQuery', 'Get-MWTranscludedIn', 'Import-MWFile', 'Invoke-MWQuery', 'Move-MWPage', 'New-MWPage', 'Protect-MWPage', 'Remove-MWPage', 'Set-MWPage', 'Test-MWPage'
 
 # Die aus diesem Modul zu exportierenden Variablen
 #VariablesToExport = '*'
@@ -42,7 +42,7 @@ CmdletsToExport = 'Add-PageText', 'Connect-Site', 'Disconnect-Site', 'Find-Pages
 # AliasesToExport = '*'
 
 # Standardpräfix für Befehle, die aus diesem Modul exportiert werden. Das Standardpräfix kann mit "Import-Module -Prefix" überschrieben werden.
-DefaultCommandPrefix = 'MW'
+#DefaultCommandPrefix = 'MW'
 
 }
 
